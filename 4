@@ -1,0 +1,8 @@
+void displayAvailableRooms() {
+    cout << "Вільні номери:" << endl;
+    for (const auto& room : rooms) {
+        if (!room.isOccupied) {
+            cout << "Номер: " << room.roomNumber << ", Клас: " << room.roomClass << endl;
+        }
+    }
+}
