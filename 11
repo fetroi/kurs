@@ -1,0 +1,163 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <Windows.h>
+
+class Room 
+{
+public:
+    Room(int roomNumber, const std::string& roomType)
+        : roomNumber(roomNumber), roomType(roomType), isOccupied(false), guestName("") {}
+
+    void checkIn(const std::string& guestName) 
+    {
+        if (!isOccupied) 
+        {
+            this->isOccupied = true;
+            this->guestName = guestName;
+            std::cout << guestName << " заселено в номер " << roomNumber << " (" << roomType << ")\n";
+        }
+        else 
+        {
+            std::cout << "Номер " << roomNumber << " (" << roomType << ") вже зайнятий\n";
+        }
+    }
+    void checkOut() 
+    {
+        if (isOccupied) 
+        {
+            std::cout << guestName << " виселено з номеру " << roomNumber << " (" << roomType << ")\n";
+            this->isOccupied = false;
+            this->guestName = "";
+        }
+        else 
+        {
+            std::cout << "Номер " << roomNumber << " (" << roomType << ") вже вільний\n";
+        }
+    }
+    bool isRoomOccupied() const 
+    {
+        return isOccupied;
+    }
+    int getRoomNumber() const 
+    {
+        return roomNumber;
+    }
+    const std::string& getRoomType() const
+    {
+        return roomType;
+    }
+    void printRoomStatus() const 
+    {
+        std::string status = isOccupied ? "Зайнятий" : "Вільний";
+        std::cout << "Номер " << roomNumber << " (" << roomType << ") - " << status << "\n";
+    }
+private:
+    int roomNumber;
+    std::string roomType;
+    bool isOccupied;
+    std::string guestName;
+};
+class Hotel 
+{
+public:
+    void addRoom(const Room& room) 
+    {
+        rooms.push_back(room);
+    }
+    void viewOccupiedRooms() const 
+    {
+        bool found = false;
+        for (const auto& room : rooms)
+        {
+            if (room.isRoomOccupied()) 
+            {
+                room.printRoomStatus();
+                found = true;
+            }
+        }
+        if (!found) 
+        {
+            std::cout << "Всі номери вільні\n";
+        }
+    }
+    void viewAvailableRooms() const
+    {
+        bool found = false;
+        for (const auto& room : rooms) 
+        {
+            if (!room.isRoomOccupied())
+            {
+                room.printRoomStatus();
+                found = true;
+            }
+        }
+        if (!found) 
+        {
+            std::cout << "Всі номери зайняті\n";
+        }
+    }
+    void checkInGuest(int roomNumber, const std::string& guestName) 
+    {
+        Room* room = findRoomByNumber(roomNumber);
+        if (room) 
+        {
+            room->checkIn(guestName);
+        }
+        else {
+            std::cout << "Номер " << roomNumber << " не знайдено\n";
+        }
+    }
+    void checkOutGuest(int roomNumber) 
+    {
+        Room* room = findRoomByNumber(roomNumber);
+        if (room) 
+        {
+            room->checkOut();
+        }
+        else
+        {
+            std::cout << "Номер " << roomNumber << " не знайдено\n";
+        }
+    
+private:
+    Room* findRoomByNumber(int roomNumber) 
+    {
+        for (auto& room : rooms)
+        {
+            if (room.getRoomNumber() == roomNumber)
+            {
+                return &room;
+            }
+        }
+        return nullptr;
+    }
+    std::vector<Room> rooms;
+};
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    Hotel hotel;
+    // Додавання номерів до готелю
+    hotel.addRoom(Room(101, "Стандарт"));
+    hotel.addRoom(Room(102, "Стандарт"));
+    hotel.addRoom(Room(201, "Полулюкс"));
+    hotel.addRoom(Room(202, "Полулюкс"));
+    hotel.addRoom(Room(301, "Люкс"));
+    // Перегляд вільних номерів
+    std::cout << "Вільні номери:\n";
+    hotel.viewAvailableRooms();
+    // Заселення клієнтів
+    hotel.checkInGuest(101, "Іван Іванов");
+    hotel.checkInGuest(201, "Петро Петренко");
+    // Перегляд зайнятих номерів
+    std::cout << "\nЗайняті номери:\n";
+    hotel.viewOccupiedRooms();
+    // Виселення клієнта
+    hotel.checkOutGuest(101);
+    // Перегляд вільних номерів після виселення
+    std::cout << "\nВільні номери після виселення:\n";
+    hotel.viewAvailableRooms();
+    return 0;
+}
