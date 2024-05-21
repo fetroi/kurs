@@ -1,0 +1,16 @@
+void checkOutClient(int roomNumber) {
+    // Позначаємо номер як вільний
+    for (auto& room : rooms) {
+        if (room.roomNumber == roomNumber) {
+            room.isOccupied = false;
+            break;
+        }
+    }
+    // Видаляємо клієнта зі списку
+    for (auto it = clients.begin(); it != clients.end(); ++it) {
+        if (it->roomNumber == roomNumber) {
+            clients.erase(it);
+            break;
+        }
+    }
+}
