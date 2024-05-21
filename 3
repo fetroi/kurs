@@ -1,0 +1,6 @@
+void displayOccupiedRooms() {
+    cout << "Зайняті номери:" << endl;
+    for (const auto& client : clients) {
+        cout << "Номер: " << client.roomNumber << ", Ім'я: " << client.firstName << " " << client.lastName << endl;
+    }
+}
