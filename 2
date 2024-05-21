@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Структура, що представляє номер готелю
+struct Room {
+int roomNumber;
+string roomClass;
+bool isOccupied;
+};
+
+// Структура, що представляє клієнта готелю
+struct Client {
+string firstName;
+string lastName;
+int roomNumber;
+};
+
+// Список доступних номерів
+vector<Room> rooms;
+
+// Список заселених клієнтів
+vector<Client> clients;
