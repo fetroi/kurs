@@ -1,0 +1,11 @@
+void checkInClient(const string& firstName, const string& lastName, int roomNumber) {
+    // Позначаємо номер як зайнятий
+    for (auto& room : rooms) {
+        if (room.roomNumber == roomNumber) {
+            room.isOccupied = true;
+            break;
+        }
+    }
+    // Додаємо клієнта до списку
+    clients.push_back({ firstName, lastName, roomNumber });
+}
